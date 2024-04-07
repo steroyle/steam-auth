@@ -12,7 +12,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.19.2"
+    "express": "^4.19.2",
+    "passport": "^0.7.0",
+    "passport-steam": "^1.0.18"
   },
   "devDependencies": {
     "dotenv": "^16.4.5",

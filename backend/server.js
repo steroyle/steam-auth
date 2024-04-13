@@ -60,6 +60,16 @@ app.get('/auth/steam/return',
   }
 );
 
+app.get('/auth/session', (req, res) => {
+  if (req.isAuthenticated()) { // Passport provides this method
+    // The user is authenticated, send back user info
+    res.json({ isAuthenticated: true, user: req.user });
+  } else {
+    // The user is not authenticated
+    res.join({ isAuthenticated: false });
+  }
+});
+
 // Home route
 app.get('/', (req, res) => {
   res.send({ message: 'Hello from the backend!' });

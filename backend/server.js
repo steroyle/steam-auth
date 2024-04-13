@@ -3,10 +3,24 @@ import express from 'express';
 import session from 'express-session';
 import passport from 'passport';
 import { Strategy as SteamStrategy } from 'passport-steam';
+import mongoose from 'mongoose';
 
 dotenv.config();
 const app = express();
 const port = process.env.PORT || 5000;
+const mongoString = process.env.MONGODB_URI;
+
+// Connect to database
+mongoose.connect(mongoString);
+const database = mongoose.connection
+
+database.on('error', (error) => {
+  console.log(error)
+})
+
+database.once('connected', () => {
+  console.log('Database Connected');
+})
 
 // Session setup
 app.use(session({

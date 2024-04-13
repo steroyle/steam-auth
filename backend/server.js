@@ -1,5 +1,6 @@
 import dotenv from 'dotenv';
 import express from 'express';
+import session from 'express-session';
 import passport from 'passport';
 import { Strategy as SteamStrategy } from 'passport-steam';
 
@@ -7,8 +8,18 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 5000;
 
-// Set up your Steam strategy here
-// You need to replace 'YOUR_STEAM_API_KEY' and 'YOUR_RETURN_URL'
+// Session setup
+app.use(session({
+  secret: process.env.SESSION_SECRET, // Make sure SESSION_SECRET is defined in your .env
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: !('development' === process.env.NODE_ENV) } // Secure cookies in production
+}));
+
+app.use(passport.initialize());
+app.use(passport.session()); // Tells Passport to use sessions
+
+// Passport Steam strategy setup
 passport.use(new SteamStrategy({
   returnURL: `${process.env.SERVER_URL}/auth/steam/return`,
   realm: process.env.SERVER_URL,
@@ -16,33 +27,45 @@ passport.use(new SteamStrategy({
 },
 function(identifier, profile, done) {
   console.log(profile);
+  // This is where you would find or create the user in your database
+  // For now, just passing the profile object
   return done(null, profile);
-  // User.findOrCreate({ steamId: profile.id }, function (err, user) {
-  //   return done(err, user);
-  // });
 }
 ));
 
-// Route to start the authentication process
-app.get('/auth/steam', passport.authenticate('steam', { failureRedirect: '/' }), function(req, res) {
+// Passport session setup
+// Serialize user into the session
+passport.serializeUser((user, done) => {
+  done(null, user.id); // Adjust depending on your user object, might be user.steamId
+});
+
+// Deserialize user from the session
+passport.deserializeUser((id, done) => {
+  // Here you would use the ID to retrieve the user from your database
+  // Since we're just logging the profile for now, this is simplified
+  done(null, { id }); // This should match your actual user retrieval logic
+});
+
+// Authentication route
+app.get('/auth/steam', passport.authenticate('steam', { failureRedirect: '/' }), (req, res) => {
   res.redirect('/');
 });
 
-// Route for Steam to redirect back to after logging in
+// Callback route after Steam authentication
 app.get('/auth/steam/return',
   passport.authenticate('steam', { failureRedirect: '/' }),
-  function (req, res) {
+  (req, res) => {
     console.log(`Returned from Steam`);
-    // Successful authentication, redirect home.
-    res.redirect('/');
+    res.redirect(process.env.APP_DOMAIN); // Redirect user after successful authentication
   }
 );
 
-
+// Home route
 app.get('/', (req, res) => {
-  res.send({ message: 'Hello from the backend!'});
+  res.send({ message: 'Hello from the backend!' });
 });
 
+// Start the server
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });

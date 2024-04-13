@@ -4,6 +4,7 @@ import session from 'express-session';
 import passport from 'passport';
 import { Strategy as SteamStrategy } from 'passport-steam';
 import mongoose from 'mongoose';
+import MongoStore from 'connect-mongo'
 
 dotenv.config();
 const app = express();
@@ -22,11 +23,17 @@ database.once('connected', () => {
   console.log('Database Connected');
 })
 
+const sessionStore = new MongoStore({
+  mongoUrl: mongoString,
+  collection: 'sessions',
+});
+
 // Session setup
 app.use(session({
   secret: process.env.SESSION_SECRET, // Make sure SESSION_SECRET is defined in your .env
   resave: false,
   saveUninitialized: true,
+  store: sessionStore,
   cookie: { secure: !('development' === process.env.NODE_ENV) } // Secure cookies in production
 }));
 

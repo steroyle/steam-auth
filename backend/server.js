@@ -10,14 +10,16 @@ const port = process.env.PORT || 5000;
 // Set up your Steam strategy here
 // You need to replace 'YOUR_STEAM_API_KEY' and 'YOUR_RETURN_URL'
 passport.use(new SteamStrategy({
-  returnURL: 'http://localhost:5000/auth/steam/return',
-  realm: process.env.APP_DOMAIN,
+  returnURL: `${process.env.SERVER_URL}/auth/steam/return`,
+  realm: process.env.SERVER_URL,
   apiKey: process.env.STEAM_API_KEY
 },
 function(identifier, profile, done) {
-  User.findOrCreate({ steamId: profile.id }, function (err, user) {
-    return done(err, user);
-  });
+  console.log(profile);
+  return done(null, profile);
+  // User.findOrCreate({ steamId: profile.id }, function (err, user) {
+  //   return done(err, user);
+  // });
 }
 ));
 

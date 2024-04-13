@@ -1,0 +1,10 @@
+.footer {
+  background: rgba(0, 0, 0, 0.25);
+  padding: 10px 0px;
+}
+
+.container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 0px 20px;
+}

@@ -61,12 +61,15 @@ app.get('/auth/steam/return',
 );
 
 app.get('/auth/session', (req, res) => {
+  console.log('Session endpoint hit');
   if (req.isAuthenticated()) { // Passport provides this method
     // The user is authenticated, send back user info
     res.json({ isAuthenticated: true, user: req.user });
+    console.log(true);
   } else {
     // The user is not authenticated
-    res.join({ isAuthenticated: false });
+    res.json({ isAuthenticated: false });
+    console.log(false);
   }
 });
 

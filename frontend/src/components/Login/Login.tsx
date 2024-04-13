@@ -1,4 +1,4 @@
-import { Button, Flex } from '@mantine/core';
+import { Button, Flex, Image } from '@mantine/core';
 
 export default function Login() {
   const handleClick = () => {
@@ -7,8 +7,14 @@ export default function Login() {
 
   return (
     <Flex justify="center" py={30}>
-      <Button variant="outline" onClick={handleClick}>
-        Login to steam
+      <Button
+        variant="transparent"
+        h={51}
+        px={0}
+        onClick={handleClick}
+        aria-label="Sign in through steam"
+      >
+        <Image src="https://steamcdn-a.akamaihd.net/steamcommunity/public/images/steamworks_docs/english/sits_large_border.png" />
       </Button>
     </Flex>
   );

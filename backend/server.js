@@ -1,10 +1,11 @@
 import dotenv from 'dotenv';
 import express from 'express';
+import cors from 'cors';
 import session from 'express-session';
 import passport from 'passport';
 import { Strategy as SteamStrategy } from 'passport-steam';
 import mongoose from 'mongoose';
-import MongoStore from 'connect-mongo'
+import MongoStore from 'connect-mongo';
 
 dotenv.config();
 const app = express();
@@ -17,11 +18,16 @@ const database = mongoose.connection
 
 database.on('error', (error) => {
   console.log(error)
-})
+});
 
 database.once('connected', () => {
   console.log('Database Connected');
-})
+});
+
+app.use(cors({
+  origin: process.env.APP_DOMAIN, // Adjust this to match your frontend origin
+  credentials: true,
+}));
 
 const sessionStore = new MongoStore({
   mongoUrl: mongoString,
@@ -32,9 +38,12 @@ const sessionStore = new MongoStore({
 app.use(session({
   secret: process.env.SESSION_SECRET, // Make sure SESSION_SECRET is defined in your .env
   resave: false,
-  saveUninitialized: true,
+  saveUninitialized: false,
   store: sessionStore,
-  cookie: { secure: !('development' === process.env.NODE_ENV) } // Secure cookies in production
+  cookie: {
+    secure: !('development' === process.env.NODE_ENV), // Secure cookies in production
+    maxAge: 1000 * 60 * 60 * 24,
+  },
 }));
 
 app.use(passport.initialize());
@@ -57,7 +66,7 @@ function(identifier, profile, done) {
 // Passport session setup
 // Serialize user into the session
 passport.serializeUser((user, done) => {
-  done(null, user.id); // Adjust depending on your user object, might be user.steamId
+  done(null, user); // Adjust depending on your user object, might be user.steamId
 });
 
 // Deserialize user from the session
@@ -81,18 +90,24 @@ app.get('/auth/steam/return',
   }
 );
 
-app.get('/auth/session', (req, res) => {
-  console.log('Session endpoint hit');
-  if (req.isAuthenticated()) { // Passport provides this method
-    // The user is authenticated, send back user info
-    res.json({ isAuthenticated: true, user: req.user });
-    console.log(true);
+app.get('/auth/status', (req, res) => {
+  if (req.isAuthenticated()) {
+    // Assuming the user object is stored in req.user after successful authentication
+    const userData = {
+      id: req.user.id, // Include only non-sensitive information
+      displayName: req.user.displayName,
+      // Add other user details as needed
+    };
+    console.log(req.user);
+    res.json({
+      isAuthenticated: true,
+      user: userData,
+    });
   } else {
-    // The user is not authenticated
     res.json({ isAuthenticated: false });
-    console.log(false);
   }
 });
+
 
 // Home route
 app.get('/', (req, res) => {

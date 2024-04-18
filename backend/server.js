@@ -55,7 +55,7 @@ passport.use(new SteamStrategy({
   realm: process.env.SERVER_URL,
   apiKey: process.env.STEAM_API_KEY
 },
-function(identifier, profile, done) {
+(identifier, profile, done) => {
   console.log(profile);
   // This is where you would find or create the user in your database
   // For now, just passing the profile object

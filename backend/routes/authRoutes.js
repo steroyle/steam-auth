@@ -9,7 +9,7 @@ router.get('/steam/return', passport.authenticate('steam', { failureRedirect: '/
   res.redirect(process.env.APP_DOMAIN);
 });
 
-router.get('/status', (req, res) => {
+router.get('/steam/status', (req, res) => {
   if (req.isAuthenticated()) {
     // Assuming the user object is stored in req.user after successful authentication
     const userData = {

@@ -1,3 +1,10 @@
+import Avatar from '../Avatar/Avatar';
+
 export function Nav() {
-  return <>Menu Link</>;
+  return (
+    <>
+      Menu Link
+      <Avatar />
+    </>
+  );
 }

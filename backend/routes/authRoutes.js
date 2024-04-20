@@ -13,7 +13,11 @@ router.get('/steam/status', (req, res) => {
   if (req.isAuthenticated()) {
     res.json({
       isAuthenticated: true,
-      user:req.user,
+      user: {
+        steamId: req.user.steamId,
+        displayName: req.user.displayName,
+        avatarUrl: req.user.photo,
+      },
     });
   } else {
     res.json({ isAuthenticated: false });

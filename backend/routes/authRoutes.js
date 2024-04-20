@@ -10,16 +10,11 @@ router.get('/steam/return', passport.authenticate('steam', { failureRedirect: '/
 });
 
 router.get('/steam/status', (req, res) => {
+  console.log(req)
   if (req.isAuthenticated()) {
-    // Assuming the user object is stored in req.user after successful authentication
-    const userData = {
-      id: req.user.id, // Include only non-sensitive information
-      displayName: req.user.displayName,
-      // Add other user details as needed
-    };
     res.json({
       isAuthenticated: true,
-      user: userData,
+      user:req.user,
     });
   } else {
     res.json({ isAuthenticated: false });

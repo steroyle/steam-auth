@@ -2,6 +2,7 @@ import Login from '@/components/Login/Login';
 import { Welcome } from '@/components/Welcome/Welcome';
 import { useEffect, useState } from 'react';
 import { useGlobalState } from '../context/GlobalStateContext';
+import OwnedGames from '@/components/OwnedGames/OwnedGames';
 
 export function HomePage() {
   const { globalState, actions } = useGlobalState();
@@ -23,7 +24,10 @@ export function HomePage() {
     <>
       {globalState.isAuthenticated ? (
         // Show Welcome if the user is logged in
-        <Welcome />
+        <>
+          <Welcome />
+          <OwnedGames />
+        </>
       ) : (
         // Otherwise, show the Login component
         <Login />

@@ -10,7 +10,6 @@ router.get('/steam/return', passport.authenticate('steam', { failureRedirect: '/
 });
 
 router.get('/steam/status', (req, res) => {
-  console.log(req)
   if (req.isAuthenticated()) {
     res.json({
       isAuthenticated: true,

@@ -18,19 +18,5 @@ export function HomePage() {
       });
   }, [globalState.isAuthenticated]);
 
-  // Conditionally render components based on the isLoggedIn state
-  return (
-    <>
-      {globalState.isAuthenticated ? (
-        // Show Welcome if the user is logged in
-        <>
-          <Welcome />
-          <OwnedGames />
-        </>
-      ) : (
-        // Otherwise, show the Login component
-        <Login />
-      )}
-    </>
-  );
+  return globalState.isAuthenticated ? <Welcome /> : <Login />;
 }

@@ -24,4 +24,16 @@ router.get('/steam/status', (req, res) => {
   }
 });
 
+router.get('/steam/logout', (req, res) => {
+  req.logout((err) => {
+    if (err) { return next(err); }
+    // Destroy the session in express-session
+    req.session.destroy(() => {
+      // connect.sid is the default name if you don't set one
+      res.clearCookie('connect.sid');
+      res.redirect(process.env.APP_DOMAIN);
+    });
+  });
+});
+
 export default router;

@@ -1,7 +1,7 @@
 import { Text, Box } from '@mantine/core';
-import { ColorSchemeToggle } from '../ColorSchemeToggle/ColorSchemeToggle';
 import { Nav } from '../Nav/Nav';
 import classes from './Header.module.css';
+import UserMenu from '../UserMenu/UserMenu';
 
 export default function Header() {
   return (
@@ -19,6 +19,7 @@ export default function Header() {
           </Text>
         </Text>
         <Nav />
+        <UserMenu />
       </Box>
     </header>
   );

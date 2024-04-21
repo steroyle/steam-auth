@@ -10,7 +10,6 @@ export const configurePassport = (env) => {
       apiKey: env.STEAM_API_KEY
     },
     async (identifier, profile, done) => {
-      // console.log(profile);
       try {
         let user = await User.findOne({ steamId: profile.id });
 

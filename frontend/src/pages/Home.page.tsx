@@ -15,7 +15,6 @@ export function HomePage() {
       .then((data) => {
         actions.setIsAuthenticated(data.isAuthenticated);
         actions.setUser(data.user);
-        console.log(globalState);
       });
   }, [globalState.isAuthenticated]);
 

@@ -12,7 +12,6 @@ router.get('/owned', async (request, response) => {
       }
       const data = await steamResponse.json();
       response.json(data.response);
-      console.log(data.response);
     } catch (error) {
       console.error(error);
       response.status(500).json({ message: 'Failed to fetch data from Steam API' });

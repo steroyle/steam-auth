@@ -3,6 +3,7 @@ import { Welcome } from '@/components/Welcome/Welcome';
 import { useEffect, useState } from 'react';
 import { useGlobalState } from '../context/GlobalStateContext';
 import OwnedGames from '@/components/OwnedGames/OwnedGames';
+import RecentlyPlayed from '@/components/RecentlyPlayed/RecentlyPlayed';
 
 export function HomePage() {
   const { globalState, actions } = useGlobalState();
@@ -18,5 +19,12 @@ export function HomePage() {
       });
   }, [globalState.isAuthenticated]);
 
-  return globalState.isAuthenticated ? <Welcome /> : <Login />;
+  return globalState.isAuthenticated ? (
+    <>
+      <Welcome />
+      <RecentlyPlayed />
+    </>
+  ) : (
+    <Login />
+  );
 }

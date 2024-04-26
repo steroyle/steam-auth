@@ -8,6 +8,7 @@ import { connectDB } from './config/database.js';
 import { configurePassport } from './config/passport.js';
 import authRoutes from './routes/authRoutes.js';
 import indexRoutes from './routes/indexRoutes.js';
+import gameRoutes from './routes/gameRoutes.js';
 import gamesRoutes from './routes/gamesRoutes.js';
 
 dotenv.config();
@@ -43,6 +44,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use('/auth', authRoutes);
+app.use('/game', gameRoutes);
 app.use('/games', gamesRoutes);
 app.use('/', indexRoutes);
 
